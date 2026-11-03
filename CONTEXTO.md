@@ -36,7 +36,7 @@ forma URI com prefixo de domínio seguido de «/».
   (1C11-C5F1-BC01 → …BC10) — limitação da norma MOD 17,16.
 
 ## Pendentes possíveis
-- Renomear o objeto exportado `EstudanteID` → `CienciaID` (coerência com o nome do ficheiro).
+- ~~Renomear o objeto exportado `EstudanteID` → `CienciaID`~~ (feito 2026-11-03).
 - Acrescentar a `FONTES` o código do Estudante-ID quando for atribuído (confirmar com a FCCN).
 - Separar os testes para um ficheiro próprio (`ciencia_id.test.js`).
 

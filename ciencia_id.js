@@ -13,7 +13,7 @@ const FONTES = Object.freeze({
 // Prefixos de domínio aceites na entrada (algoritmo comum)
 const RE_DOMINIO = /^(?:HTTPS?:\/\/)?(?:WWW\.)?((?:ESTUDANTE|CIENCIA)-ID\.PT)\//;
 
-const EstudanteID = {
+const CienciaID = {
   FONTES,
 
   f(x) { const v = x % ModL; return v === 0 ? ModL : v; },
@@ -94,7 +94,7 @@ const EstudanteID = {
   },
 };
 
-if (typeof module !== "undefined") module.exports = EstudanteID;
+if (typeof module !== "undefined") module.exports = CienciaID;
 
 // ---- Teste com Ciência IDs públicos do CIÊNCIAVITAE ----
 if (require.main === module) {
@@ -105,9 +105,9 @@ if (require.main === module) {
   ];
   let ok = 0;
   for (const id of ids) {
-    const s = EstudanteID.normalize(id);
-    const calc = EstudanteID.computeCheck(s.slice(0, 11));
-    const v = EstudanteID.isValid(id);
+    const s = CienciaID.normalize(id);
+    const calc = CienciaID.computeCheck(s.slice(0, 11));
+    const v = CienciaID.isValid(id);
     ok += v;
     console.log(`${id}  esperado=${s[11]}  calculado=${calc}  ${v ? "OK" : "FALHA"}`);
   }
@@ -116,26 +116,26 @@ if (require.main === module) {
   // Controlo negativo: alterar 1 dígito ou trocar 2 adjacentes deve falhar
   let det = 0, tot = 0;
   for (const id of ids) {
-    const s = EstudanteID.normalize(id);
+    const s = CienciaID.normalize(id);
     for (let i = 0; i < 12; i++) for (const d of "0123456789ABCDEF") {
       if (d === s[i]) continue;
-      tot++; if (!EstudanteID.isValid(s.slice(0, i) + d + s.slice(i + 1))) det++;
+      tot++; if (!CienciaID.isValid(s.slice(0, i) + d + s.slice(i + 1))) det++;
     }
     for (let i = 0; i < 11; i++) {
       if (s[i] === s[i + 1]) continue;
-      tot++; if (!EstudanteID.isValid(s.slice(0, i) + s[i + 1] + s[i] + s.slice(i + 2))) det++;
+      tot++; if (!CienciaID.isValid(s.slice(0, i) + s[i + 1] + s[i] + s.slice(i + 2))) det++;
     }
   }
   console.log(`Erros simples/transposições detetados: ${det}/${tot}`);
-  console.log("Formato URI:", EstudanteID.format(ids[0], true));
+  console.log("Formato URI:", CienciaID.format(ids[0], true));
 
   console.log("\nDecomposição (Tabela 4):");
   for (const id of ids) {
-    const p = EstudanteID.parse(id);
+    const p = CienciaID.parse(id);
     console.log(`${id}  val=${p.validacaoInterna} ent=${p.entidadeRegisto} uid=${p.identificadorUnico} (${p.identificadorUnicoDec})`);
   }
-  const ents = new Set(ids.map(i => EstudanteID.parse(i).entidadeRegisto));
+  const ents = new Set(ids.map(i => CienciaID.parse(i).entidadeRegisto));
   console.log("Entidades de registo observadas:", [...ents].join(", "));
-  const b = EstudanteID.build("EA", 1, 0x191C239D);
-  console.log("build() reconstrói EA11-91C2-39D1:", EstudanteID.format(b), b === "EA1191C239D1" ? "OK" : "FALHA");
+  const b = CienciaID.build("EA", 1, 0x191C239D);
+  console.log("build() reconstrói EA11-91C2-39D1:", CienciaID.format(b), b === "EA1191C239D1" ? "OK" : "FALHA");
 }

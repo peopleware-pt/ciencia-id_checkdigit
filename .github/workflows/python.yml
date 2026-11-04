@@ -1,0 +1,26 @@
+name: python
+on:
+  push:
+    branches: [main]
+    tags: ["python-v*"]
+    paths: [python/**, test-vectors.json, .github/workflows/python.yml]
+  pull_request:
+    paths: [python/**, test-vectors.json, .github/workflows/python.yml]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - run: cmp LICENSE ../LICENSE && cmp NOTICE ../NOTICE

@@ -1,0 +1,29 @@
+name: php
+on:
+  push:
+    branches: [main]
+    tags: ["php-v*"]
+    paths: [php/**, test-vectors.json, .github/workflows/php.yml]
+  pull_request:
+    paths: [php/**, test-vectors.json, .github/workflows/php.yml]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ["7.4", "8.1", "8.3", "8.5"]
+    defaults:
+      run:
+        working-directory: php
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer
+          coverage: none
+      - run: php tests/run.php
+      - run: composer validate --strict
+      - run: cmp LICENSE ../LICENSE && cmp NOTICE ../NOTICE

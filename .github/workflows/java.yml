@@ -1,5 +1,6 @@
 name: java
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     tags: ["java-v*"]

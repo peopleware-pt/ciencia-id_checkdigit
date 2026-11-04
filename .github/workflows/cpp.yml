@@ -1,5 +1,6 @@
 name: cpp
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     tags: ["cpp-v*"]

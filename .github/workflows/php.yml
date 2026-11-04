@@ -1,5 +1,6 @@
 name: php
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     tags: ["php-v*"]

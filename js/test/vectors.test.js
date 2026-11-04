@@ -35,9 +35,12 @@ test("computeCheckDigit vectors", () => { for (const v of V.computeCheckDigit) a
 test("normalize vectors", () => { for (const v of V.normalize) assert.equal(C.normalize(v.input), v.expected, JSON.stringify(v.input)); });
 test("format vectors", () => { for (const v of V.format) assert.equal(C.format(v.input, v.withDomain), v.expected, JSON.stringify(v.input)); });
 
-test("linear trim", { timeout: 2000 }, () => {
-  C.parse("x" + " ".repeat(1e6) + "x");
-  C.normalize(" ".repeat(1e6) + "x" + " ".repeat(1e6));
+test("linear trim", () => {
+  // ponytail: wall-clock bound; node:test's timeout cannot interrupt synchronous code.
+  const t0 = Date.now();
+  C.parse("x" + " ".repeat(1e5) + "x");
+  C.normalize(" ".repeat(1e5) + "x" + " ".repeat(1e5));
+  assert.ok(Date.now() - t0 < 1000, "trim is not linear");
 });
 
 test("non-string input is treated like null", () => {

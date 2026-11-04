@@ -11,8 +11,12 @@ target_compile_features(cienciaid INTERFACE cxx_std_17)
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   enable_testing()
   include(FetchContent)
+  if(POLICY CMP0135)
+    cmake_policy(SET CMP0135 NEW)
+  endif()
   FetchContent_Declare(json
-    URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
+    URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
+    URL_HASH SHA256=d6c65aca6b1ed68e7a182f4757257b107ae403032760ed6ef121c9d55e81757d)
   FetchContent_MakeAvailable(json)
 
   add_executable(vectors_test tests/vectors_test.cpp)

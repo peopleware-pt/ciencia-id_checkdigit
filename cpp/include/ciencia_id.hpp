@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2026 Paulo Soares (PeopleWare(R)). See LICENSE and NOTICE.
 // Ciencia ID check digit (ISO/IEC 7064, MOD 17,16). Header-only, C++17.
 // Implements the pseudo-code of "Estudante-ID - Regras de uso do Identificador para Parceiros" v1.0.
 #ifndef CIENCIA_ID_HPP

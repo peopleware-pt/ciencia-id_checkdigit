@@ -8,3 +8,4 @@ python/dist/
 java/target/
 php/vendor/
 cpp/build/
+/docs/

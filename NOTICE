@@ -1,0 +1,5 @@
+Ciência ID check digit library
+Copyright 2026 Paulo Soares (PeopleWare®)
+
+Implements the check digit (ISO/IEC 7064, MOD 17,16) described in
+«Estudante-ID – Regras de uso do Identificador para Parceiros» v1.0 (MCTES, 2016).

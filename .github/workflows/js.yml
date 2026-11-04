@@ -25,3 +25,33 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: node --test test/vectors.test.js
       - run: cmp LICENSE ../LICENSE && cmp NOTICE ../NOTICE
+  publish:
+    if: startsWith(github.ref, 'refs/tags/js-v')
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    defaults:
+      run:
+        working-directory: js
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest
+      - name: Tag must match package.json version
+        run: test "${GITHUB_REF_NAME#js-v}" = "$(node -p "require('./package.json').version")"
+      - name: Publish (trusted publishing, skipped if the version exists)
+        run: |
+          V="${GITHUB_REF_NAME#js-v}"
+          if npm view "@peopleware-pt/ciencia-id@$V" version >/dev/null 2>&1; then
+            echo "@peopleware-pt/ciencia-id@$V already published"
+          else
+            npm publish --access public
+          fi
+      - run: gh release create "$GITHUB_REF_NAME" --title "JavaScript v${GITHUB_REF_NAME#js-v}" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}

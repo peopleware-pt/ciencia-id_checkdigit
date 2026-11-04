@@ -28,3 +28,29 @@ jobs:
       - run: php tests/run.php
       - run: composer validate --strict
       - run: cmp LICENSE ../LICENSE && cmp NOTICE ../NOTICE
+  publish:
+    if: startsWith(github.ref, 'refs/tags/php-v')
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Push php/ to the read-only mirror and tag it
+        env:
+          DEPLOY_KEY: ${{ secrets.PHP_MIRROR_DEPLOY_KEY }}
+          MIRROR: git@github.com:peopleware-pt/ciencia-id-php.git
+        run: |
+          V="${GITHUB_REF_NAME#php-v}"
+          git subtree split --prefix=php -b php-split
+          eval "$(ssh-agent -s)"
+          ssh-add - <<< "$DEPLOY_KEY"
+          mkdir -p ~/.ssh && ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+          git push "$MIRROR" php-split:main --force
+          git tag "v$V" php-split
+          git push "$MIRROR" "v$V"
+      - run: gh release create "$GITHUB_REF_NAME" --title "PHP v${GITHUB_REF_NAME#php-v}" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}

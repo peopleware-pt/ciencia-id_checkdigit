@@ -20,3 +20,16 @@ jobs:
       - run: cmake -S cpp -B build -DCMAKE_BUILD_TYPE=Release
       - run: cmake --build build --config Release
       - run: ctest --test-dir build -C Release --output-on-failure
+  publish:
+    if: startsWith(github.ref, 'refs/tags/cpp-v')
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Tag must match CMake project version
+        run: test "${GITHUB_REF_NAME#cpp-v}" = "$(sed -nE 's/^project\(cienciaid VERSION ([0-9.]+).*/\1/p' cpp/CMakeLists.txt)"
+      - run: gh release create "$GITHUB_REF_NAME" --title "C++ v${GITHUB_REF_NAME#cpp-v}" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}

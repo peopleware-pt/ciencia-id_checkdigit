@@ -1,6 +1,6 @@
 # peopleware/ciencia-id
 
-Validation of the Ciência ID check digit (ISO/IEC 7064, MOD 17,16). Zero dependencies, PHP 7.4+.
+Validation of the Ciência ID check digit (ISO/IEC 7064, MOD 17,16). Zero dependencies, PHP 7.4+. Requires 64-bit PHP (`uniqueIdDecimal` goes up to 4294967295, above a 32-bit int).
 
 > The `ciencia-id-php` repository is a read-only mirror. Issues and pull requests go to
 > [`peopleware-pt/ciencia-id_checkdigit`](https://github.com/peopleware-pt/ciencia-id_checkdigit).
@@ -50,16 +50,15 @@ digits; it only says the check digit is consistent.
 
 `warnings` contains `"DOMAIN_MISMATCH"` when the input carried a domain prefix that differs from the
 domain of the ID's source (for example `estudante-id.pt/EA11-91C2-39D1`).
+The warning does not change `status` or `isValid`. For an unknown source, any domain prefix counts as a mismatch.
 
 ## Historical note
 
-Ciência ID continues the Estudante-ID identifier. The `estudante-id.pt` prefix is still accepted on input,
-but IDs from source `1` belong to `ciencia-id.pt`, so such input yields `DOMAIN_MISMATCH`.
+The check-digit mechanism was designed for two identifiers: Ciência ID (in use, source `1`) and Estudante-ID, which was never implemented, has no source code assigned and will not get one. The library is named after Ciência ID, but the algorithm also supports Estudante-ID, for historical reasons: the `estudante-id.pt/` prefix is accepted on input and yields the `DOMAIN_MISMATCH` warning.
 
 ## Known limitation
 
-A single check digit cannot detect every error. Swapping the last two characters of an ID ending in `…BC01`
-gives `…BC10`, which also validates. This is a property of the algorithm, not a bug.
+The check digit detects every single-character substitution, but not every adjacent transposition: at each position exactly one of the 120 possible pairs of distinct hex digits can be swapped undetected (about 1 in 120). In particular, swapping the last data digit and the check digit goes undetected when they are `0` and `1`, so an ID ending in `01` and the same ID ending in `10` both validate (e.g. `1C11-C5F1-BC01` and `1C11-C5F1-BC10`).
 
 ## Tests
 

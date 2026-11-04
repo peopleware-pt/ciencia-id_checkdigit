@@ -10,7 +10,7 @@
   <packaging>jar</packaging>
 
   <name>ciencia-id</name>
-  <description>Ciência ID check digit (ISO/IEC 7064, MOD 17,16) validation</description>
+  <description>Ciência ID check digit (ISO/IEC 7064 MOD 17,16) validation</description>
   <url>https://github.com/peopleware-pt/ciencia-id_checkdigit</url>
 
   <licenses>
@@ -74,6 +74,17 @@
           <compilerArgs>
             <arg>-Xlint:-options</arg>
           </compilerArgs>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>pt.peopleware.cienciaid</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
         </configuration>
       </plugin>
       <plugin>

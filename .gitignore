@@ -7,3 +7,4 @@ python/dist/
 *.egg-info/
 java/target/
 php/vendor/
+cpp/build/

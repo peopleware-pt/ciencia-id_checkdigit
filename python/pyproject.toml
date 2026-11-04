@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ciencia-id"
+version = "1.0.0"
+description = "Ciência ID check digit (ISO/IEC 7064 MOD 17,16) validation"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Paulo Soares (PeopleWare®)" }]
+
+[project.urls]
+Source = "https://github.com/peopleware-pt/ciencia-id_checkdigit"

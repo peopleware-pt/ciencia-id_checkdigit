@@ -2,3 +2,6 @@
 .DS_Store
 *.pdf
 node_modules/
+__pycache__/
+python/dist/
+*.egg-info/

@@ -34,3 +34,18 @@ test("mutations", () => {
 test("computeCheckDigit vectors", () => { for (const v of V.computeCheckDigit) assert.equal(C.computeCheckDigit(v.input), v.expected, JSON.stringify(v.input)); });
 test("normalize vectors", () => { for (const v of V.normalize) assert.equal(C.normalize(v.input), v.expected, JSON.stringify(v.input)); });
 test("format vectors", () => { for (const v of V.format) assert.equal(C.format(v.input, v.withDomain), v.expected, JSON.stringify(v.input)); });
+
+test("linear trim", { timeout: 2000 }, () => {
+  C.parse("x" + " ".repeat(1e6) + "x");
+  C.normalize(" ".repeat(1e6) + "x" + " ".repeat(1e6));
+});
+
+test("non-string input is treated like null", () => {
+  assert.equal(C.isValid(["EA1191C239D1"]), false);
+  assert.equal(C.isValid(Buffer.from("EA1191C239D1")), false);
+  assert.equal(C.isValid(421274525), false);
+  const r = C.parse(Object.create(null));
+  assert.equal(r.status, "INVALID");
+  assert.equal(r.reason, "FORMAT");
+  assert.equal(C.normalize(["ea11"]), "");
+});

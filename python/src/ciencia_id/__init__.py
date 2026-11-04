@@ -51,9 +51,9 @@ def _split(value):
 
     Only ASCII whitespace is trimmed and only ASCII letters are upper-cased (no Unicode folding).
     """
-    if value is None:
+    if not isinstance(value, str):
         return "", None
-    s = str(value).strip(_ASCII_WS).translate(_ASCII_UPPER)
+    s = value.strip(_ASCII_WS).translate(_ASCII_UPPER)
     indicated = None
     m = _DOMAIN_RE.match(s)
     if m:

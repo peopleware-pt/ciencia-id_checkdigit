@@ -70,6 +70,12 @@ class VectorsTest(unittest.TestCase):
         for v in V["format"]:
             self.assertEqual(C.format(v["input"], v["withDomain"]), v["expected"], repr(v["input"]))
 
+    def test_non_string_input_is_treated_like_none(self):
+        self.assertIs(C.is_valid(b"EA1191C239D1"), False)
+        self.assertIs(C.is_valid(["EA1191C239D1"]), False)
+        self.assertEqual(C.parse(421274525).reason, "FORMAT")
+        self.assertEqual(C.normalize(b"ea11"), "")
+
 
 if __name__ == "__main__":
     unittest.main()

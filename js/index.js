@@ -8,6 +8,17 @@ const SOURCES = Object.freeze({
 
 const DOMAIN_RE = /^(?:HTTPS?:\/\/)?(?:WWW\.)?((?:CIENCIA|ESTUDANTE)-ID\.PT)\//;
 
+const WS = " \t\n\r\f\v";
+
+// Linear-time trim of ASCII whitespace only (a regex alternation with $ is quadratic).
+function trim(str) {
+  let a = 0;
+  let b = str.length;
+  while (a < b && WS.includes(str[a])) a++;
+  while (b > a && WS.includes(str[b - 1])) b--;
+  return str.slice(a, b);
+}
+
 function f(x) {
   const v = x % 16;
   return v === 0 ? 16 : v;
@@ -16,10 +27,8 @@ function f(x) {
 // Returns { s, indicatedDomain }: the canonical upper-case ID text and the domain prefix found, if any.
 // Only ASCII whitespace is trimmed and only ASCII letters are upper-cased (no Unicode folding).
 function split(input) {
-  if (input === null || input === undefined) return { s: "", indicatedDomain: null };
-  let s = String(input)
-    .replace(/^[ \t\n\r\f\v]+|[ \t\n\r\f\v]+$/g, "")
-    .replace(/[a-z]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 32));
+  if (typeof input !== "string") return { s: "", indicatedDomain: null };
+  let s = trim(input).replace(/[a-z]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 32));
   let indicatedDomain = null;
   const m = DOMAIN_RE.exec(s);
   if (m) {

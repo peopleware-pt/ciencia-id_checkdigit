@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>pt.peopleware</groupId>
+  <artifactId>ciencia-id</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>ciencia-id</name>
+  <description>Ciência ID check digit (ISO/IEC 7064, MOD 17,16) validation</description>
+  <url>https://github.com/peopleware-pt/ciencia-id_checkdigit</url>
+
+  <licenses>
+    <license>
+      <name>Apache-2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Paulo Soares</name>
+      <organization>PeopleWare®</organization>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/peopleware-pt/ciencia-id_checkdigit</url>
+    <connection>scm:git:https://github.com/peopleware-pt/ciencia-id_checkdigit.git</connection>
+    <developerConnection>scm:git:https://github.com/peopleware-pt/ciencia-id_checkdigit.git</developerConnection>
+  </scm>
+
+  <properties>
+    <maven.compiler.release>8</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.11.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.10.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>..</directory>
+        <includes>
+          <include>LICENSE</include>
+          <include>NOTICE</include>
+        </includes>
+        <targetPath>META-INF</targetPath>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <compilerArgs>
+            <arg>-Xlint:-options</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.2</version>
+        <configuration>
+          <argLine>-Duser.language=tr -Duser.country=TR -Dfile.encoding=ISO-8859-1</argLine>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

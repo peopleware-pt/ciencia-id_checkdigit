@@ -19,11 +19,13 @@ jobs:
       run:
         working-directory: js
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: ${{ matrix.node }}
       - run: node --test test/vectors.test.js
+      - name: ESM named imports
+        run: node --input-type=module -e "import { isValid, parse } from './index.js'; if (!isValid('EA11-91C2-39D1') || parse('x').status !== 'INVALID') process.exit(1)"
       - run: cmp LICENSE ../LICENSE && cmp NOTICE ../NOTICE
   publish:
     if: startsWith(github.ref, 'refs/tags/js-v')
@@ -31,19 +33,32 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: write
+      contents: read
     defaults:
       run:
         working-directory: js
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@latest
+      - run: npm install -g npm@12.2.2
+      - name: Tag must be on main
+        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/main
       - name: Tag must match package.json version
         run: test "${GITHUB_REF_NAME#js-v}" = "$(node -p "require('./package.json').version")"
+      - name: Packed tarball must load (CommonJS and ESM)
+        run: |
+          TARBALL="$PWD/$(npm pack --silent)"
+          cd "$(mktemp -d)"
+          npm init -y >/dev/null
+          npm install "$TARBALL"
+          node -e "process.exit(require('@peopleware-pt/ciencia-id').isValid('EA11-91C2-39D1') ? 0 : 1)"
+          node --input-type=module -e "import { isValid } from '@peopleware-pt/ciencia-id'; process.exit(isValid('EA11-91C2-39D1') ? 0 : 1)"
       - name: Publish (trusted publishing, skipped if the version exists)
         run: |
           V="${GITHUB_REF_NAME#js-v}"
@@ -52,6 +67,13 @@ jobs:
           else
             npm publish --access public
           fi
+  release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
       - run: gh release create "$GITHUB_REF_NAME" --title "JavaScript v${GITHUB_REF_NAME#js-v}" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}

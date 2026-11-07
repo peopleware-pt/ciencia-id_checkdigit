@@ -19,8 +19,8 @@ jobs:
       run:
         working-directory: python
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: ${{ matrix.python }}
       - run: PYTHONPATH=src python -m unittest discover -s tests -v
@@ -32,19 +32,37 @@ jobs:
     environment: pypi
     permissions:
       id-token: write
-      contents: write
+      contents: read
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: "3.13"
+      - name: Tag must be on main
+        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/main
       - name: Tag must match pyproject.toml version
         run: test "${GITHUB_REF_NAME#python-v}" = "$(python -c 'import tomllib; print(tomllib.load(open("python/pyproject.toml", "rb"))["project"]["version"])')"
-      - run: pip install build && python -m build python/
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - run: pip install build==1.6.1 && python -m build python/
+      - name: Built wheel must load
+        run: |
+          python -m venv "$RUNNER_TEMP/smoke"
+          "$RUNNER_TEMP/smoke/bin/pip" install python/dist/*.whl
+          cd "$RUNNER_TEMP"
+          smoke/bin/python -c "from ciencia_id import is_valid; raise SystemExit(0 if is_valid('EA11-91C2-39D1') else 1)"
+      - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1
         with:
           packages-dir: python/dist/
           skip-existing: true
+  release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
       - run: gh release create "$GITHUB_REF_NAME" --title "Python v${GITHUB_REF_NAME#python-v}" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}

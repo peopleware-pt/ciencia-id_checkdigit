@@ -61,8 +61,10 @@ Each implementation is versioned and released on its own, with tags
 
 Depend on the package for your language through its registry and let
 Dependabot or Renovate propose new versions; a change in one language does not
-release the others. For C++, watch the GitHub Releases tagged `cpp-v*` and bump
-the `GIT_TAG` in your `FetchContent_Declare`.
+release the others. C++ has no registry: let Renovate bump the `GIT_TAG` in your
+`FetchContent_Declare` with the configuration in
+[cpp/README.md](cpp/README.md#updates). GitHub's *Watch → Releases* cannot
+filter by tag, so it reports the releases of every language.
 
 ## Known limitation
 

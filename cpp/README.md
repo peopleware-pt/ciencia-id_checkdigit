@@ -17,8 +17,38 @@ FetchContent_MakeAvailable(cienciaid)
 target_link_libraries(your_target PRIVATE cienciaid::cienciaid)
 ```
 
-Or copy `include/ciencia_id.hpp` (copy `LICENSE` and `NOTICE` with it). Track updates through the GitHub Releases tagged `cpp-v*`.
+Or copy `include/ciencia_id.hpp` (copy `LICENSE` and `NOTICE` with it).
 Used as a subproject, the library builds no tests and downloads nothing.
+
+## Updates
+
+C++ has no package registry, and Dependabot does not read `FetchContent`.
+[Renovate](https://docs.renovatebot.com/) can open a pull request that bumps
+`GIT_TAG` whenever a `cpp-v*` tag is released. Add this to your `renovate.json`:
+
+```json
+{
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)CMakeLists\\.txt$/"],
+      "matchStrings": [
+        "GIT_REPOSITORY\\s+https://github\\.com/peopleware-pt/ciencia-id_checkdigit(\\.git)?\\s+GIT_TAG\\s+cpp-v(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "peopleware-pt/ciencia-id_checkdigit",
+      "datasourceTemplate": "github-tags",
+      "extractVersionTemplate": "^cpp-v(?<version>.+)$"
+    }
+  ]
+}
+```
+
+The pattern expects `GIT_TAG` right after `GIT_REPOSITORY`, as in the example
+above; tags of the other languages are ignored.
+
+For notifications only, GitHub's *Watch → Custom → Releases* cannot filter by
+tag and reports the releases of every language. C++ release titles start with
+`C++ v`, so filter on that.
 
 ## Usage
 

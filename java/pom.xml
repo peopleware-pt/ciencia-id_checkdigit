@@ -9,7 +9,7 @@
   <version>1.0.0</version>
   <packaging>jar</packaging>
 
-  <name>ciencia-id</name>
+  <name>Ciência ID check digit</name>
   <description>Ciência ID check digit (ISO/IEC 7064 MOD 17,16) validation</description>
   <url>https://github.com/peopleware-pt/ciencia-id_checkdigit</url>
 
@@ -33,6 +33,11 @@
     <connection>scm:git:https://github.com/peopleware-pt/ciencia-id_checkdigit.git</connection>
     <developerConnection>scm:git:https://github.com/peopleware-pt/ciencia-id_checkdigit.git</developerConnection>
   </scm>
+
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/peopleware-pt/ciencia-id_checkdigit/issues</url>
+  </issueManagement>
 
   <properties>
     <maven.compiler.release>8</maven.compiler.release>

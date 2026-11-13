@@ -2,6 +2,8 @@
   "name": "@peopleware-pt/ciencia-id",
   "version": "1.1.1",
   "description": "Ciência ID check digit (ISO/IEC 7064 MOD 17,16) validation",
+  "keywords": ["ciencia-id", "check-digit", "iso-7064", "mod-17-16", "validation", "identifier", "portugal"],
+  "homepage": "https://github.com/peopleware-pt/ciencia-id_checkdigit/tree/main/js#readme",
   "main": "index.js",
   "types": "index.d.ts",
   "exports": "./index.js",

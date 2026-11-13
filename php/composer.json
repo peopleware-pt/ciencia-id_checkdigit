@@ -2,6 +2,8 @@
     "name": "peopleware/ciencia-id",
     "description": "Ciência ID check digit (ISO/IEC 7064 MOD 17,16) validation",
     "type": "library",
+    "keywords": ["ciencia-id", "check-digit", "iso-7064", "mod-17-16", "validation", "identifier", "portugal"],
+    "homepage": "https://github.com/peopleware-pt/ciencia-id_checkdigit/tree/main/php#readme",
     "license": "Apache-2.0",
     "authors": [
         { "name": "Paulo Soares (PeopleWare®)" }
@@ -13,6 +15,7 @@
         "psr-4": { "Peopleware\\CienciaId\\": "src/" }
     },
     "support": {
+        "issues": "https://github.com/peopleware-pt/ciencia-id_checkdigit/issues",
         "source": "https://github.com/peopleware-pt/ciencia-id_checkdigit"
     }
 }

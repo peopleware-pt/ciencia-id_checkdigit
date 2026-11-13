@@ -11,6 +11,17 @@ requires-python = ">=3.9"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE"]
 authors = [{ name = "Paulo Soares (PeopleWare®)" }]
+keywords = ["ciencia-id", "check-digit", "iso-7064", "mod-17-16", "validation", "identifier", "portugal"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
 
 [project.urls]
+Documentation = "https://github.com/peopleware-pt/ciencia-id_checkdigit/tree/main/python#readme"
 Source = "https://github.com/peopleware-pt/ciencia-id_checkdigit"
+Issues = "https://github.com/peopleware-pt/ciencia-id_checkdigit/issues"

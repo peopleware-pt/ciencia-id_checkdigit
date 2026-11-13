@@ -52,3 +52,9 @@ test("non-string input is treated like null", () => {
   assert.equal(r.reason, "FORMAT");
   assert.equal(C.normalize(["ea11"]), "");
 });
+
+test("index.d.ts declares every runtime export", () => {
+  const dts = fs.readFileSync(path.join(__dirname, "..", "index.d.ts"), "utf8");
+  const declared = [...dts.matchAll(/^export declare (?:const|function) (\w+)/gm)].map((m) => m[1]).sort();
+  assert.deepEqual(declared, Object.keys(C).sort());
+});

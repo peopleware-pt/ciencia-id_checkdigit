@@ -1,6 +1,6 @@
 # @peopleware-pt/ciencia-id
 
-Validation of the Ciência ID check digit (ISO/IEC 7064, MOD 17,16). Zero dependencies, Node 18+.
+Validation of the Ciência ID check digit (ISO/IEC 7064, MOD 17,16). Zero dependencies, Node 18+, TypeScript declarations included (`parse` returns a union narrowed by `status`).
 
 ## Install
 

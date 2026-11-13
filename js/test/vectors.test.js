@@ -58,3 +58,8 @@ test("index.d.ts declares every runtime export", () => {
   const declared = [...dts.matchAll(/^export declare (?:const|function) (\w+)/gm)].map((m) => m[1]).sort();
   assert.deepEqual(declared, Object.keys(C).sort());
 });
+
+test("package author survives npm normalisation", () => {
+  // npm re-parses author as "name <email> (url)", even in object form.
+  assert.doesNotMatch(JSON.stringify(require("../package.json").author), /[()<>]/);
+});
